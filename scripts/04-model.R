@@ -1,11 +1,10 @@
 #### Preamble ####
-# Purpose: Models... [...UPDATE THIS...]
-# Author: Rohan Alexander [...UPDATE THIS...]
-# Date: 11 February 2023 [...UPDATE THIS...]
-# Contact: rohan.alexander@utoronto.ca [...UPDATE THIS...]
-# License: MIT
-# Pre-requisites: [...UPDATE THIS...]
-# Any other information needed? [...UPDATE THIS...]
+# Purpose: Models Toronto Police Budget Over time and Crime Rates
+# Author: Yisu Hou
+# Date: 21 September 2024
+# Contact: yisu.hou@mail.utoronto.ca
+# License: None
+# Pre-requisites: None
 
 
 #### Workspace setup ####

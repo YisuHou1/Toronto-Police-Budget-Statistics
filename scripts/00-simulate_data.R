@@ -1,11 +1,10 @@
 #### Preamble ####
 # Purpose: Simulates data
-# Author: Rohan Alexander
-# Date: 19 September 2024
-# Contact: rohan.alexander@utoronto.ca
-# License: MIT
+# Author: Yisu Hou
+# Date: 21 September 2024
+# Contact: yisu.hou@mail.utoronto.ca
+# License: None
 # Pre-requisites: None
-# Any other information needed? None
 
 
 #### Workspace setup ####
