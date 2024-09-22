@@ -23,7 +23,7 @@ data_cri$crime |> min() <= 0
 raw_bud$Amount |> min() <= 0
 raw_cri$COUNT_ |> min() <= 0
 # the raw dataset for budget contains negative numbers because 
-# the police department spends money
+# the police department makes revenue sometimes
 
 # Test for NAs
 all(is.na(data_bud$budget))
