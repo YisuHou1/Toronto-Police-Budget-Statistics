@@ -95,3 +95,26 @@ ggplot(data = summary_table_bud, aes(x = Year, y = Yearly_Budget)) +
     y = "Yearly Budget ($)"
   )
 
+
+# plot for crime and cleared crime count over time
+ggplot(summary_table_cri, aes(x = factor(Year))) + 
+  # Plot total crime count as a full bar
+  geom_bar(aes(y = Yearly_Crimes, fill = "Total Crimes"), stat = "identity",
+           position = "stack") +
+  
+  # Overlay cleared crimes as a portion of the total crimes
+  geom_bar(aes(y = Cleared_Crimes, fill = "Cleared Crimes"), 
+           stat = "identity", position = "stack") +
+  
+  # Custom colors
+  scale_fill_manual(values = c("Total Crimes" = "tomato", 
+                               "Cleared Crimes" = "skyblue")) +
+  
+  # Labels and theme
+  labs(
+    title = "Crime and Cleared Crime Count Over Time",
+    x = "Year",
+    y = "Number of Crimes",
+    fill = "Crime Type"
+  ) +
+  theme_minimal()
