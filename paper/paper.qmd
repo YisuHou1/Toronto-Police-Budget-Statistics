@@ -21,37 +21,27 @@ library(tidyverse)
 library(knitr)
 library(kableExtra)
 
-data <- read_csv(here::here("data/analysis_data/analysis_data.csv"))
+data_bud <- read_csv(here::here("data/analysis_data/analysis_budget_data.csv"))
+data_cri <- read_csv(here::here("data/analysis_data/analysis_crime_data.csv"))
 
 ```
 
 
 # Introduction
 
-You can and should cross-reference sections and sub-sections. We use @talia, @opendatatorotno, and @rohan.
-
-The remainder of this paper is structured as follows. @sec-mydatasection
 
 
 
 # Data {#sec-mydatasection}
 
-Some of our data is of penguins (@fig-marriage), from @palmerpenguins.
+
 
 ```{r}
-#| label: fig-marriage
-#| fig-cap: Bills of penguins
-#| echo: false
 
-data |> 
-  ggplot(aes(x = date, y = marriage_licenses)) +
-  geom_point()
 
 ```
 
 Talk more about it.
-
-And also planes (@fig-planes). (You can change the height and width, but don't worry about doing that until you have finished every other aspect of the paper - Quarto will try to make it look nice and the defaults usually work well once you have enough text.)
 
 
 \newpage
