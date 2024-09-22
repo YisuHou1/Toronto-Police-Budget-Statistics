@@ -12,28 +12,31 @@ library(tidyverse)
 
 
 #### Simulate data ####
-set.seed(304)
+set.seed(114514)
 
 # Define the start and end date
-start_date <- as.Date("2018-01-01")
-end_date <- as.Date("2023-12-31")
+start_date <- 2020
+end_date <- 2024
 
 # Set the number of random dates you want to generate
-number_of_dates <- 100
+number_of_cases <- 100
 
-data <-
+data_sim_budget <-
   tibble(
-    dates = as.Date(
+    year = round(
       runif(
-        n = number_of_dates,
-        min = as.numeric(start_date),
-        max = as.numeric(end_date)
-      ),
-      origin = "1970-01-01"
-    ),
-    number_of_marriage = rpois(n = number_of_dates, lambda = 15)
+        n = number_of_cases,
+        min = start_date,
+        max = end_date
+      )),
+    budget = rpois(n = number_of_cases, lambda = 2000)
   )
+
+data_sim_crime <- tibble(year = c(2020, 2021, 2022, 2023, 2024),
+      crime = rpois(n = 5, lambda = 20))
 
 
 #### Write_csv
-write_csv(data, file = "data/raw_data/simulated.csv")
+write_csv(data_sim_budget, file = "data/raw_data/simulated_budget.csv")
+write_csv(data_sim_crime, file = "data/raw_data/simulated_crime.csv")
+
