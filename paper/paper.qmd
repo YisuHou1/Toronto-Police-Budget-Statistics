@@ -4,9 +4,13 @@ subtitle: "Analyzing the changes in annual police budget and its effects
 on the number of crimes within Toronto"
 author: 
   - Yisu Hou
+thanks: "Code and data supporting this analysis are available at: 
+https://github.com/YisuHou1/Toronto-Police-Budget-Statistics."
 date: today
 date-format: long
-abstract: "First sentence. Second sentence. Third sentence. Fourth sentence."
+abstract: "An analysis of Toronto's annual police budget and crime counts
+was conducted to determine the effectiveness of the budget in preventing
+crime within the city."
 format: pdf
 number-sections: true
 bibliography: references.bib
