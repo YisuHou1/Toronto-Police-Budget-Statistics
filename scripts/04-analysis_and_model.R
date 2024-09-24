@@ -16,7 +16,7 @@ library(kableExtra)
 data_bud <- read_csv("data/analysis_data/analysis_budget_data.csv")
 data_cri <- read_csv("data/analysis_data/analysis_crime_data.csv")
 
-### Model data ####
+### Analyze data ####
 # table of yearly police budget over time
 summary_table_bud <- data.frame(
   Year = c(2020, 2021, 2022, 2023),
@@ -118,3 +118,7 @@ ggplot(summary_table_cri, aes(x = factor(Year))) +
     fill = "Crime Type"
   ) +
   theme_minimal()
+
+# save the summary tables as csv files to use them directly in the document
+write_csv(summary_table_bud, "data/analysis_data/total_budget_data.csv")
+write_csv(summary_table_cri, "data/analysis_data/total_crime_data.csv")
