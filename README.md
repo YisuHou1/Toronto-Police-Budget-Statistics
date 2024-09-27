@@ -18,5 +18,5 @@ The repo is structured as:
 
 ## Statement on LLM usage
 
-Aspects of the code were written with the help of generative AI tool, ChatGPT. The entire chat history is available in inputs/llms/usage.txt.
+Aspects of the code were written with the help of generative AI tool, ChatGPT. ChatGPT was also used to correct typos, spelling mistakes, and filler words. The entire chat history is available in inputs/llms/usage.txt.
 
