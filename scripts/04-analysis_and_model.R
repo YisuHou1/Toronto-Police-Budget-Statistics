@@ -16,8 +16,8 @@ library(kableExtra)
 data_bud <- read_csv("data/analysis_data/analysis_budget_data.csv")
 data_cri <- read_csv("data/analysis_data/analysis_crime_data.csv")
 
-### Analyze data ####
-# table of yearly police budget over time
+#### Analyze data ####
+# summary table of total yearly police budget over time
 summary_table_bud <- data.frame(
   Year = c(2020, 2021, 2022, 2023),
   
@@ -51,7 +51,7 @@ summary_table_bud %>%
   kable_styling(bootstrap_options = c("striped",
                                       "hover", "condensed", "responsive"))
 
-# table of number of crimes over time
+# summary table of total number of crimes over time
 summary_table_cri <- data.frame(
   Year = c(2020, 2021, 2022, 2023),
   
@@ -122,3 +122,38 @@ ggplot(summary_table_cri, aes(x = factor(Year))) +
 # save the summary tables as csv files to use them directly in the document
 write_csv(summary_table_bud, "data/analysis_data/total_budget_data.csv")
 write_csv(summary_table_cri, "data/analysis_data/total_crime_data.csv")
+
+# graph police budget with crime count
+# first combine summary tables to include both variables
+combined <- merge(summary_table_bud, summary_table_cri, by = "Year")
+
+# take billions for budget to make a clearer graph
+combined <- combined %>% mutate(
+  bud_billion = Yearly_Budget/1000000000
+)
+
+# graph
+ggplot(data = combined, aes(x = bud_billion, y = Yearly_Crimes)) + 
+  geom_line(stat = "identity", color = "skyblue") + 
+  geom_text(aes(label = Year), 
+            vjust = -0.6,
+            hjust = -0.2,
+            size = 3.3,
+            color = "black") + 
+  labs(
+    title = "Figure 3: Reported Crimes for Different Police Budget, 2020-2023",
+    x = "Yearly Budget (billion$)",
+    y = "Total Reported Crimes"
+  ) +
+  geom_point()
+
+
+#### Model ####
+# this is a complimentary component just for me to investigate
+# the relationship between variables, not included in the paper,
+# thus is not saved as a file in the repository
+
+summary(lm(Yearly_Crimes ~ Yearly_Budget, data = combined))
+# the relationship is insignificant
+
+
