@@ -1,23 +1,13 @@
 ---
-title: "Wasted Money: Toronto Police Budget and Crime Number"
-subtitle: "Analyzing the changes in annual police budget and its effects
-on the number of crimes within Toronto from 2020 to 2023"
+title: "Wasted Money? Changes in Toronto's Annual Police Budget and Reported
+Crimes From 2020 to 2023"
 author: 
   - Yisu Hou
 thanks: "Code and data supporting this analysis are available at: 
 https://github.com/YisuHou1/Toronto-Police-Budget-Statistics."
 date: today
 date-format: long
-abstract: "An analysis of Toronto's annual police budget and crime counts
-was conducted using R to determine the effectiveness of the budget in preventing
-crime within the city from 2020 to 2023. It was found that the number of
-reported crimes steadily increased while the rate of cleared crimes decreased
-over time. Changes in the police budget, including raises from 2020 to 2022
-and a reduction from 2022 to 2023, were uninfluential toward crime rates. The
-finding that the police budget does not have positive or negative relationships
-with crime insdicates that Toronto's current mode of crime prevention is
-unproductive, and the police budget is potentially being wasted. It calls for
-a need to reconsider how the safety of Toronto's citizens should be facilitated."
+abstract: "This study analyzed Toronto's annual police budget and crime statistics from 2020 to 2023 using R to assess the budget's effectiveness in preventing crime. Results showed that reported crimes steadily increased while the clearance rate declined over time. Budget changes, including increases from 2020 to 2022 and a reduction from 2022 to 2023, had no significant impact on crime rates. The lack of a relationship between the police budget and crime suggests that Toronto's current crime prevention strategies may be ineffective and that the police budget could be misallocated. These findings highlight the need to reevaluate strategies for ensuring the safety of Toronto's citizens."
 format: pdf
 header-includes:
   - \usepackage{indentfirst}
@@ -40,6 +30,8 @@ library(tidyverse)
 library(knitr)
 library(kableExtra)
 
+raw_bud <- read_csv(here::here("data/raw_data/raw_budget_data.csv"))
+raw_cri <- read_csv(here::here("data/raw_data/raw_crime_data.csv"))
 data_bud <- read_csv(here::here("data/analysis_data/analysis_budget_data.csv"))
 data_cri <- read_csv(here::here("data/analysis_data/analysis_crime_data.csv"))
 summary_table_bud <- 
@@ -50,70 +42,24 @@ summary_table_cri <-
 
 # Introduction
 
-In recently years, personal safety has developed into one
-of the most prominent concerns among Toronto's citizens. @socialconnectedness
-illustrated the recent rise in the number of violent crimes; the annual number
-of shootings in 2020 was 462, almost double the average annual number from 2004
-to 2015. The finding of @Putrik2019 constructs the connection between violence
-and the lack of subjective safety, showing that people's perception of
-higher rates of violent crimes, among other forms of crime, was the only factor
-that had a positive correlation with feeling unsafe. The objective increase in
-violent crimes and the subjective safety concerns compel individuals to question
-whether the city's police department is fulfilling its purpose,
-especially since the police consume a significant proportion of the city budget.
+In recent years, personal safety has become a prominent concern among Toronto's citizens. @socialconnectedness illustrated a rise in violent crimes; the annual number of shootings in 2020 was 462, nearly double the average annual number from 2004 to 2015. The findings of @Putrik2019 establish a connection between violence and the lack of subjective safety, showing that people's perception of higher rates of violent crimes, among other crimes, was the only factor positively correlated with feeling unsafe. The objective increase in violent crimes and subjective safety concerns compel individuals to question whether the city's police department is fulfilling its purpose, especially since the police consume a significant proportion of the city budget.
 
-To date, no comprehensive study has addressed the relationship
-between the police budget and the number of crimes in Toronto. However, such an
-analysis is essential to assess the effectiveness of the police department in
-preventing crime and protecting the safety of citizens. The study was conducted
-with the purpose to fill this particular gap in the literature.
+To date, no comprehensive study has addressed the relationship between the police budget and the number of crimes in Toronto. Such an analysis is essential to assess the effectiveness of the police department in preventing crime and protecting citizens' safety. This study aims to fill this gap in the literature. In the United States, a few quantitative studies have examined this topic, with most scholars identifying a significantly negative relationship between police budget and crime rates. For instance, @MELLO found that a higher level of policing had statistically significant effects on reducing robbery, larceny, and auto theft, driving the decline in overall victimization. Additionally, @LIN used state tax rates as an instrumental variable to regress police presence against crime, discovering elasticities of -1.1 for violent crime and -0.9 for property crime.
 
-Relying on official data provided by Open Data Toronto @opendatatoronto and utilizing
-R, a programming language created by @r, the annual police budget, the sum of
-reported crimes, and the sum of cleared crimes were extracted for years 2020 to
-2023. Using the data, it was identified that the number of crimes consistently
-rose while the number of cleared crimes remained relatively stable, leading to
-a reduction in the clearance ratio. The total annual budget of the police
-department, calculated through subtracting revenues from the money spent, 
-increased slightly from 2020 to 2022 but fell by over 40% in 2023. The drastic
-change observed in the police budget data and the consistency of the crime number
-data demonstrates Toronto police's lack of influence on crime. Thus, this paper
-encourages a thorough analysis of why the investment toward Toronto's police
-department was not translated into fewer crimes and increased safety.
+Using official data from Open Data Toronto @opendatatoronto and the R programming language @r, the annual police budget, the number of reported crimes, and the number of cleared crimes were analyzed for the years 2020 to 2023. The data revealed that the number of reported crimes consistently rose while the number of cleared crimes remained relatively stable, leading to a reduction in the clearance ratio. The police department's total annual budget increased slightly from 2020 to 2022 but fell by over 45% in 2023. The drastic change in the police budget and the consistent crime numbers indicate that the Toronto police have little influence on crime rates. Therefore, this paper encourages a thorough analysis of why investment in Toronto's police department has not resulted in fewer crimes and increased safety.
 
-The subsequent sections of this paper includes an introduction and justification
-of the data source, an overview of the relevant variables, and a preliminary
-analysis of the temporal trend between police budget and the number of crimes
-in Toronto.
+The subsequent sections of this paper include a justification of the data source, an overview of the relevant variables, and a preliminary analysis of the temporal trends between the police budget and the number of crimes in Toronto.
 
 
 # Data {#sec-mydatasection}
+## Introduction of Datasets
+Two datasets were extracted from Open Data Toronto @opendatatoronto: one records all instances of expenditure and revenue in Toronto Police since 2020, and the other contains the number of reported crimes in various categories along with the corresponding number of cleared crimes up to the end of 2023. Summary statistics of the disaggregated data are presented in @tbl-raw-bud and @tbl-raw-cri in the Appendix. These tables are excluded from the main body because the analysis focuses on aggregate budgets and total crime counts rather than individual expenses and specific crime categories.
 
-Two separate datasets were extracted from Open Data Toronto @opendatatoronto, 
-one recording all instances of expenditure and revenue since 2020, the other storing
-the number of reported crimes in different categories and the corresponding
-number of cleared crimes until the end of 2023. The summary statistics of the 
-disaggregated data are located in the Appendix. They are not included in the body of
-this paper because they are not used for analysis; the paper emphasizes aggregate
-budgets and reported crime counts instead of individual paychecks and crime
-categories. 
+Open Data Toronto was chosen as the data source because it provides official data from the City of Toronto, ensuring credibility, variety, and depth. The only alternative source for crime and police budget data is the Toronto Police data portal, and its datasets are identical to those in Open Data Toronto.
 
-Open Data Toronto was selected to be the data source because it provides official
-data from the City of Toronto, ensuring a decent level of credibility, variety,
-and depth. The only alternative source of datasets on crime and police budget is 
-the data portal of Toronto Police, and the datasets are identical to those in
-Open Data Toronto. The measurements of the data, as provided by @opendatatoronto,
-are not perfectly reliable. The police budget dataset is measured by addressing
-approved budgets from Toronto Police Services Board and City Council and operation
-expenses incurred. Expenses or revenues that were not officially reported were
-excluded from the dataset. The dataset for crime reports and cleared crimes
-relies on reports filed by officers, so undiscovered crimes are not
-included, and unfounded reports are included. The biases in the measurements
-increases the difficulty when interpreting trends. For example, if the number
-of reported crimes increased over time, it might be due to an actual increase
-in the number of crimes or an improvement in officers' ability to find crimes.
+The data measurements from @opendatatoronto are not entirely reliable. The police budget dataset includes approved budgets from the Toronto Police Services Board and City Council, as well as operational expenses incurred. Expenses or revenues that were not officially reported are excluded from the dataset. The crime reports and cleared crimes dataset relies on reports filed by officers, meaning undiscovered crimes are not included, and unfounded reports are counted. These measurement biases complicate trend interpretation. For example, an increase in reported crimes may reflect either an actual rise in crime or an improvement in officers' ability to detect crimes.
 
-The cleaned, aggregated datasets are as follows:
+The cleaned, aggregated datasets generated using knitr @knitr and KableExtra @kextra are as follows:
 
 ```{r}
 #| echo: false
@@ -128,7 +74,7 @@ summary_table_bud %>%
 
 ```
 
-\vspace{1em}
+\vspace{0.4em}
 
 ```{r}
 #| echo: false
@@ -143,37 +89,33 @@ summary_table_cri %>%
 
 ```
 
-Data cleaning and calculations were used to arrive at the variables in @tbl-bud
-and @tbl-cri. "Year" was limited to 2020-2023 because the oldest data in the 
-police budget dataset is 2020, and the most recent data in the crime report
-dataset is 2023. "Yearly Budget" was calculated by summing all individual
-expenses and revenues in the disaggregated dataset, which stores positive values for 
-expenses and negative values for revenues. "Change From Last" was acquired by
-subtracting the previous year's "Yearly Budget" from the current year, except
-2020 because the previous year does not exist. "Percent Change" was calculated
-by dividing the prevous year's "Yearly budget" by the current "Change From Last".
-For @tbl-cri, "Yearly Crimes" and "Cleared Crimes" were calculated by summing
-the reported cases and cleared cases of all crime categories in the disaggregated
-dataset, respectively. The data cleaning proecss was aided by the R package
-tidyverse @tidyverse.
+## Data Cleaning
 
+Data cleaning and calculations were performed to derive the variables in @tbl-bud and @tbl-cri. The "Year" variable was limited to 2020–2023 because the police budget dataset begins in 2020 and the crime report dataset extends to 2023. "Yearly Budget" was calculated by summing all individual expenses and revenues in the disaggregated dataset, with expenses represented as positive values and revenues as negative values. "Change From Last" was determined by subtracting the previous year's "Yearly Budget" from the current year, excluding 2020, which has no preceding year. "Percent Change" was calculated by dividing the previous year's "Yearly Budget" by the current "Change From Last." For @tbl-cri, "Yearly Crimes" and "Cleared Crimes" were calculated by summing the reported and cleared cases across all crime categories, respectively. The data cleaning process was facilitated by the R package tidyverse @tidyverse.
+
+## Temporal Analysis
+@fig-bud and @fig-cri captures the temporal change in police budgets and crimes.
 
 ```{r}
 #| label: fig-bud
 #| fig-cap: "Total Police Budget Over Time"
 #| echo: false
 
+# take billions for budget to make a clearer graph
+summary_table_bud <- summary_table_bud %>% mutate(
+  bud_billion = Yearly_Budget/1000000000
+)
+
 # graphs to show change in police budget and crime rates over time
-ggplot(data = summary_table_bud, aes(x = Year, y = Yearly_Budget)) + 
+ggplot(data = summary_table_bud, aes(x = Year, y = bud_billion)) + 
   geom_bar(stat = "identity", fill = "skyblue") + 
   labs(
     x = "Year",
-    y = "Yearly Budget ($)"
+    y = "Yearly Budget (Billion$)"
   )
 
 ```
 
-\vspace{1em}
 
 ```{r}
 #| label: fig-cri
@@ -209,22 +151,74 @@ ggplot(summary_table_cri, aes(x = factor(Year))) +
 
 \FloatBarrier
 
-@tbl-bud and @fig-bud shows minor increases in the police budget from 2020 to 2022, 
-and a near-half reduction in 2023. @fig-cri illustrates consistent increases in
-total crimes from 2021 to 2023, while the cleared cases remained relatively
-static throughout four years. Thus, it is unsurprising to observe that in
-@tbl-cri, the rate of cleared crimes decreased steadily, demonstrating the
-persistent deterioration of the police's ability to prevent crime, regardless of
-the budget. It can be argued that the amount of resources possessed by Toronto
-Police does not impact its productivity, and it is necessary to reconsider how
-the city budget should be allocated. Taking this another step further, the fact
-that altering the police budget does not impact the number of crimes indicates
-that our policing is fundamentally ineffective, or that the laws, even enforced
-through policing, does not prevent crime. Therefore, it is imperative to assess 
-whether the current modes of policing and lawmaking have real impacts on
-criminals' decision-making.
+@tbl-bud and @fig-bud show minor increases in the police budget from 2020 to 2022, followed by a nearly 50% reduction in 2023. @fig-cri illustrates a consistent rise in total crimes from 2021 to 2023, while the number of cleared cases remained relatively stable over the four-year period. Consequently, @tbl-cri reveals a steady decrease in the clearance rate, indicating a persistent decline in safety conditions in Toronto despite changes in the police budget.
+
+It is important to note that the recorded total budget for 2023 may not accurately reflect the actual level of policing resources compared to previous years. Although 2024 data is not included in this paper, the recorded budget for that year is approximately 1.2 billion, similar to the 2023 budget. In contrast, earlier years had budgets exceeding 2 billion dollars. This discrepancy suggests a possible shift in measurement or recording methods in 2023, although @opendatatoronto does not indicate such a change. This limitation may affect the validity of the analysis presented in this paper.
+
+## Police Budget-Crime Relationship
+
+```{r}
+#| label: fig-cri-relationship
+#| fig-cap: "Reported Crimes for Different Police Budget, 2020-2023"
+#| echo: false
+
+# graph police budget with crime count
+# first combine summary tables to include both variables
+combined <- merge(summary_table_bud, summary_table_cri, by = "Year")
+
+# take billions for budget to make a clearer graph
+combined <- combined %>% mutate(
+  bud_billion = Yearly_Budget/1000000000
+)
+
+# graph
+ggplot(data = combined, aes(x = bud_billion, y = Yearly_Crimes)) + 
+  geom_line(stat = "identity", color = "skyblue") + 
+  geom_text(aes(label = Year), 
+            vjust = -0.35,
+            hjust = -0.2,
+            size = 2.4,
+            color = "black") + 
+  scale_x_continuous(limits = c(1.19, 2.5)) +
+  scale_y_continuous(limits = c(118000, 173000)) +
+  labs(
+    x = "Yearly Police Budget (Billion$)",
+    y = "Total Reported Crimes"
+  ) +
+  geom_point()
+
+```
+
+It is not possible to identify a significant relationship between the yearly police budget and annual reported crimes based on @fig-cri-relationship. From 2020 to 2022, both the police budget and crime reports increased, but in 2023, the budget sharply decreased, making the trend appear negative. Additionally, the original datasets provided only four data points for analysis, which is insufficient to establish meaningful correlations.
 
 
+```{r}
+#| label: fig-clear-relationship
+#| fig-cap: "Cleared Crimes Percentage for Different Police Budgets, 2020-2023"
+#| echo: false
+
+
+# graph cleared crimes over police budget
+ggplot(data = combined, aes(x = bud_billion, y = Percentage_Cleared)) + 
+  geom_line(stat = "identity", color = "skyblue") + 
+  geom_text(aes(label = Year), 
+            vjust = -0.35,
+            hjust = -0.2,
+            size = 2.4,
+            color = "black") + 
+  scale_x_continuous(limits = c(min(combined$bud_billion), max(combined$bud_billion) + 0.1)) +
+  labs(
+    x = "Yearly Police Budget (Billion$)",
+    y = "Percentage of Total Crimes Cleared"
+  ) +
+  geom_point()
+
+```
+\FloatBarrier
+
+Similarly, the relationship between the police budget and the percentage of cleared crimes remains ambiguous. @fig-clear-relationship shows a negative relationship from 2020 to 2022, but with 2023 recording both the lowest budget and the lowest clearance percentage, contrary to the previous trend.
+
+In summary, no definitive conclusions can be drawn about the relationship between the annual police budget and the level of safety in Toronto. This uncertainty may stem from a possible change in the measurement of the police budget dataset in 2023. Nevertheless, the lack of a clear relationship warrants further investigation, suggesting that the resources allocated to the Toronto Police may not effectively impact crime prevention. It is crucial to determine why criminal activity has increased despite government efforts in recent years. Potential factors include socioeconomic influences driving individuals toward crime, issues in lawmaking, or inefficiencies within policing strategies.
 
 \newpage
 
@@ -232,8 +226,94 @@ criminals' decision-making.
 
 # Appendix {.unnumbered}
 
-The appendix is left blank for now. I need to add raw tables here and update
-tests. The plots are created with @knitr and @kextra
+Summary statistics of raw data frames are presented below.
+
+\FloatBarrier
+```{r}
+#| echo: false
+
+# make the summary statistics table for raw datasets on police budget
+# rename ambiguous variable name in raw dataset
+raw_bud <- raw_bud %>%
+  rename(
+    Spending = Amount
+  )
+
+# make a summary table
+raw_bud_summary <- raw_bud %>%
+  summarise(
+    across(
+      c(Fiscal_Year, Spending),
+      list(
+        Mean = ~round(mean(.), 2),
+        Median = ~round(median(.), 2),
+        SD = ~round(sd(.), 2),
+        Min = ~round(min(.), 2),
+        Max = ~round(max(.), 2)
+      ),
+      .names = "{col}_{fn}"
+    )
+  )
+
+# transpose for better viewing
+bud_summary_df_t <- raw_bud_summary %>%
+  pivot_longer(
+    cols = everything(),
+    names_to = "Statistic",
+    values_to = "Value"
+  )
+
+# present the table using kable
+kable(bud_summary_df_t,
+      caption = "Summary Statistics for Raw Police Budget Dataset {#tbl-raw-bud}",
+      col.names = c("Statistic", "Value"),
+      format = "latex") %>%
+  kable_styling(latex_options = c("striped", "hold_position"))
+
+
+```
+
+\vspace{0.5em}
+
+```{r}
+#| echo: false
+
+# rename ambiguous variable name in raw dataset
+raw_cri <- raw_cri %>%
+  rename(
+    CRIME_COUNT = COUNT_
+  )
+
+raw_cri_summary <- raw_cri %>%
+  summarise(
+    across(
+      c(REPORT_YEAR, CRIME_COUNT, COUNT_CLEARED),
+      list(
+        Mean = ~round(mean(.), 2),
+        Median = ~round(median(.), 2),
+        SD = ~round(sd(.), 2),
+        Min = ~round(min(.), 2),
+        Max = ~round(max(.), 2)
+      ),
+      .names = "{col}_{fn}"
+    )
+  )
+
+cri_summary_df_t <- raw_cri_summary %>%
+  pivot_longer(
+    cols = everything(),
+    names_to = "Statistic",
+    values_to = "Value"
+  )
+
+kable(cri_summary_df_t,
+      caption = "Summary Statistics for Raw Crime Dataset {#tbl-raw-cri}",
+      col.names = c("Statistic", "Value"),
+      format = "latex") %>%
+  kable_styling(latex_options = c("striped", "hold_position"))
+
+
+```
 
 \newpage
 
