@@ -25,7 +25,7 @@ resources_bud <- list_package_resources("668434ee-9541-40a8-adb6-0ad805fcc9b6")
 datastore_resources_bud <- 
   filter(resources_bud, tolower(format) %in% c('csv', 'geojson'))
 
-# load datasets for 2020 to 2024
+# load all datasets for 2020 to 2024
 data_bud0 <- filter(datastore_resources_bud, row_number()==1) %>% get_resource()
 data_bud1 <- filter(datastore_resources_bud, row_number()==2) %>% get_resource()
 data_bud2 <- filter(datastore_resources_bud, row_number()==7) %>% get_resource()
