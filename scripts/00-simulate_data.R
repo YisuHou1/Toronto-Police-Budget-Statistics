@@ -29,7 +29,8 @@ data_sim_budget <-
         n = number_of_cases,
         min = start_date,
         max = end_date
-      )),
+      )
+    ),
     budget = rpois(n = number_of_cases, lambda = 2000)
   )
 
@@ -42,18 +43,18 @@ data_sim_crime <-
         n = number_of_cases,
         min = start_date,
         max = end_date
-      )),
-   crime = rpois(n = number_of_cases, lambda = 100)
+      )
+    ),
+    crime = rpois(n = number_of_cases, lambda = 100)
   )
 
 # number of cleared crimes is between 0 and reported crimes
 data_sim_crime <- data_sim_crime %>%
   rowwise() %>%
-    mutate(cleared = sample(0:crime, 1)) %>%
-    ungroup()
+  mutate(cleared = sample(0:crime, 1)) %>%
+  ungroup()
 
 
 #### Write_csv
 write_csv(data_sim_budget, file = "data/raw_data/simulated_budget.csv")
 write_csv(data_sim_crime, file = "data/raw_data/simulated_crime.csv")
-

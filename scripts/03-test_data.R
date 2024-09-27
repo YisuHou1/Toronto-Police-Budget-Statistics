@@ -30,7 +30,7 @@ data_cri$cleared |> min() < 0
 raw_bud$Amount |> min() < 0
 raw_cri$COUNT_ |> min() < 0
 raw_cri$COUNT_CLEARED |> min() < 0
-# only the raw dataset for budget contains negative numbers because 
+# only the raw dataset for budget contains negative numbers because
 # the police department makes revenue sometimes
 
 # Test for NAs: simulated and raw data
@@ -70,7 +70,7 @@ all(is.na(cleaned_bud))
 all(is.na(cleaned_cri))
 
 # Check if the range of time is correct
-cleaned_bud$Fiscal_Year |> min() == 2020 
+cleaned_bud$Fiscal_Year |> min() == 2020
 cleaned_bud$Fiscal_Year |> max() == 2023
 cleaned_cri$REPORT_YEAR |> min() == 2020
 cleaned_cri$REPORT_YEAR |> max() == 2023
@@ -79,5 +79,3 @@ cleaned_cri$REPORT_YEAR |> max() == 2023
 is.double(cleaned_bud$Amount)
 is.double(cleaned_cri$COUNT_)
 is.double(cleaned_cri$COUNT_CLEARED)
-
-

@@ -33,9 +33,9 @@ raw_bud <- read_csv(here::here("data/raw_data/raw_budget_data.csv"))
 raw_cri <- read_csv(here::here("data/raw_data/raw_crime_data.csv"))
 data_bud <- read_csv(here::here("data/analysis_data/analysis_budget_data.csv"))
 data_cri <- read_csv(here::here("data/analysis_data/analysis_crime_data.csv"))
-summary_table_bud <- 
+summary_table_bud <-
   read_csv(here::here("data/analysis_data/total_budget_data.csv"))
-summary_table_cri <- 
+summary_table_cri <-
   read_csv(here::here("data/analysis_data/total_crime_data.csv"))
 ```
 
@@ -65,12 +65,14 @@ The cleaned, aggregated datasets generated using 'knitr' [@knitr] and 'KableExtr
 
 # present the budget variables table
 summary_table_bud %>%
-  kable("latex", caption = "Total Police Budget Over Years {#tbl-bud}",
-        col.names = c("Year", "Yearly Budget", 
-                              "Change From Last", "Percent Change")) %>%
+  kable("latex",
+    caption = "Total Police Budget Over Years {#tbl-bud}",
+    col.names = c(
+      "Year", "Yearly Budget",
+      "Change From Last", "Percent Change"
+    )
+  ) %>%
   kable_styling(latex_options = c("striped", "hold_position"))
-
-
 ```
 
 \vspace{0.4em}
@@ -80,12 +82,14 @@ summary_table_bud %>%
 
 # present the crime variables table
 summary_table_cri %>%
-  kable("latex", caption = "Total Crime Reports Over Years {#tbl-cri}",
-        col.names = c("Year", "Yearly Crimes", 
-                              "Cleared Crimes", "Percent Cleared")) %>%
+  kable("latex",
+    caption = "Total Crime Reports Over Years {#tbl-cri}",
+    col.names = c(
+      "Year", "Yearly Crimes",
+      "Cleared Crimes", "Percent Cleared"
+    )
+  ) %>%
   kable_styling(latex_options = c("striped", "hold_position"))
-
-
 ```
 
 ## Data Cleaning
@@ -102,17 +106,16 @@ Data cleaning and calculations were performed to derive the variables in @tbl-bu
 
 # take billions for budget to make a clearer graph
 summary_table_bud <- summary_table_bud %>% mutate(
-  bud_billion = Yearly_Budget/1000000000
+  bud_billion = Yearly_Budget / 1000000000
 )
 
 # graphs to show change in police budget and crime rates over time
-ggplot(data = summary_table_bud, aes(x = Year, y = bud_billion)) + 
-  geom_bar(stat = "identity", fill = "skyblue") + 
+ggplot(data = summary_table_bud, aes(x = Year, y = bud_billion)) +
+  geom_bar(stat = "identity", fill = "skyblue") +
   labs(
     x = "Year",
     y = "Yearly Budget (Billion$)"
   )
-
 ```
 \vspace{1em}
 \FloatBarrier
@@ -125,19 +128,24 @@ ggplot(data = summary_table_bud, aes(x = Year, y = bud_billion)) +
 #| echo: false
 
 # plot for crime and cleared crime count over time
-ggplot(summary_table_cri, aes(x = factor(Year))) + 
+ggplot(summary_table_cri, aes(x = factor(Year))) +
   # Plot total crime count as a full bar
-  geom_bar(aes(y = Yearly_Crimes, fill = "Total Crimes"), stat = "identity",
-           position = "stack") +
-  
+  geom_bar(aes(y = Yearly_Crimes, fill = "Total Crimes"),
+    stat = "identity",
+    position = "stack"
+  ) +
+
   # Overlay cleared crimes as a portion of the total crimes
-  geom_bar(aes(y = Cleared_Crimes, fill = "Cleared Crimes"), 
-           stat = "identity", position = "stack") +
-  
+  geom_bar(aes(y = Cleared_Crimes, fill = "Cleared Crimes"),
+    stat = "identity", position = "stack"
+  ) +
+
   # Custom colors
-  scale_fill_manual(values = c("Total Crimes" = "tomato", 
-                               "Cleared Crimes" = "skyblue")) +
-  
+  scale_fill_manual(values = c(
+    "Total Crimes" = "tomato",
+    "Cleared Crimes" = "skyblue"
+  )) +
+
   # Labels and theme
   labs(
     x = "Year",
@@ -145,7 +153,6 @@ ggplot(summary_table_cri, aes(x = factor(Year))) +
     fill = "Crime Type"
   ) +
   theme_minimal()
-
 ```
 
 
@@ -168,17 +175,18 @@ combined <- merge(summary_table_bud, summary_table_cri, by = "Year")
 
 # take billions for budget to make a clearer graph
 combined <- combined %>% mutate(
-  bud_billion = Yearly_Budget/1000000000
+  bud_billion = Yearly_Budget / 1000000000
 )
 
 # graph
-ggplot(data = combined, aes(x = bud_billion, y = Yearly_Crimes)) + 
-  geom_line(stat = "identity", color = "skyblue") + 
-  geom_text(aes(label = Year), 
-            vjust = -0.35,
-            hjust = -0.2,
-            size = 2.4,
-            color = "black") + 
+ggplot(data = combined, aes(x = bud_billion, y = Yearly_Crimes)) +
+  geom_line(stat = "identity", color = "skyblue") +
+  geom_text(aes(label = Year),
+    vjust = -0.35,
+    hjust = -0.2,
+    size = 2.4,
+    color = "black"
+  ) +
   scale_x_continuous(limits = c(1.19, 2.5)) +
   scale_y_continuous(limits = c(118000, 173000)) +
   labs(
@@ -186,7 +194,6 @@ ggplot(data = combined, aes(x = bud_billion, y = Yearly_Crimes)) +
     y = "Total Reported Crimes"
   ) +
   geom_point()
-
 ```
 
 
@@ -197,20 +204,20 @@ ggplot(data = combined, aes(x = bud_billion, y = Yearly_Crimes)) +
 
 
 # graph cleared crimes over police budget
-ggplot(data = combined, aes(x = bud_billion, y = Percentage_Cleared)) + 
-  geom_line(stat = "identity", color = "skyblue") + 
-  geom_text(aes(label = Year), 
-            vjust = -0.35,
-            hjust = -0.2,
-            size = 2.4,
-            color = "black") + 
+ggplot(data = combined, aes(x = bud_billion, y = Percentage_Cleared)) +
+  geom_line(stat = "identity", color = "skyblue") +
+  geom_text(aes(label = Year),
+    vjust = -0.35,
+    hjust = -0.2,
+    size = 2.4,
+    color = "black"
+  ) +
   scale_x_continuous(limits = c(min(combined$bud_billion), max(combined$bud_billion) + 0.1)) +
   labs(
     x = "Yearly Police Budget (Billion$)",
     y = "Percentage of Total Crimes Cleared"
   ) +
   geom_point()
-
 ```
 \FloatBarrier
 
@@ -245,11 +252,11 @@ raw_bud_summary <- raw_bud %>%
     across(
       c(Fiscal_Year, Spending),
       list(
-        Mean = ~round(mean(.), 2),
-        Median = ~round(median(.), 2),
-        SD = ~round(sd(.), 2),
-        Min = ~round(min(.), 2),
-        Max = ~round(max(.), 2)
+        Mean = ~ round(mean(.), 2),
+        Median = ~ round(median(.), 2),
+        SD = ~ round(sd(.), 2),
+        Min = ~ round(min(.), 2),
+        Max = ~ round(max(.), 2)
       ),
       .names = "{col}_{fn}"
     )
@@ -265,12 +272,11 @@ bud_summary_df_t <- raw_bud_summary %>%
 
 # present the table using kable
 kable(bud_summary_df_t,
-      caption = "Summary Statistics for Raw Police Budget Dataset {#tbl-raw-bud}",
-      col.names = c("Statistic", "Value"),
-      format = "latex") %>%
+  caption = "Summary Statistics for Raw Police Budget Dataset {#tbl-raw-bud}",
+  col.names = c("Statistic", "Value"),
+  format = "latex"
+) %>%
   kable_styling(latex_options = c("striped", "hold_position"))
-
-
 ```
 
 \vspace{0.5em}
@@ -289,11 +295,11 @@ raw_cri_summary <- raw_cri %>%
     across(
       c(REPORT_YEAR, CRIME_COUNT, COUNT_CLEARED),
       list(
-        Mean = ~round(mean(.), 2),
-        Median = ~round(median(.), 2),
-        SD = ~round(sd(.), 2),
-        Min = ~round(min(.), 2),
-        Max = ~round(max(.), 2)
+        Mean = ~ round(mean(.), 2),
+        Median = ~ round(median(.), 2),
+        SD = ~ round(sd(.), 2),
+        Min = ~ round(min(.), 2),
+        Max = ~ round(max(.), 2)
       ),
       .names = "{col}_{fn}"
     )
@@ -307,12 +313,11 @@ cri_summary_df_t <- raw_cri_summary %>%
   )
 
 kable(cri_summary_df_t,
-      caption = "Summary Statistics for Raw Crime Dataset {#tbl-raw-cri}",
-      col.names = c("Statistic", "Value"),
-      format = "latex") %>%
+  caption = "Summary Statistics for Raw Crime Dataset {#tbl-raw-cri}",
+  col.names = c("Statistic", "Value"),
+  format = "latex"
+) %>%
   kable_styling(latex_options = c("striped", "hold_position"))
-
-
 ```
 
 \newpage

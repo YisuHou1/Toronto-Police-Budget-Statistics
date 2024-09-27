@@ -15,12 +15,14 @@ raw_data_cri <- read_csv("data/raw_data/raw_crime_data.csv")
 
 
 # 2024 budget data was removed because crime rates data does not contain 2024
-cleaned_bud <- raw_data_bud %>% select(Fiscal_Year, Amount) %>% 
+cleaned_bud <- raw_data_bud %>%
+  select(Fiscal_Year, Amount) %>%
   filter(Fiscal_Year <= 2023)
 
-cleaned_cri <- raw_data_cri %>% filter(REPORT_YEAR >= 2020) %>%
+cleaned_cri <- raw_data_cri %>%
+  filter(REPORT_YEAR >= 2020) %>%
   select(REPORT_YEAR, COUNT_, COUNT_CLEARED)
-  
+
 
 #### Save data ####
 write_csv(cleaned_bud, "data/analysis_data/analysis_budget_data.csv")
