@@ -45,20 +45,20 @@ In recent years, personal safety has become a prominent concern among Toronto's 
 
 To date, no comprehensive study has addressed the relationship between the police budget and the number of crimes in Toronto. Such an analysis is essential to assess the effectiveness of the police department in preventing crime and protecting citizens' safety. This study aims to fill this gap in the literature. In the United States, a few quantitative studies have examined this topic, with most scholars identifying a significantly negative relationship between police budget and crime rates. For instance, @MELLO found that a higher level of policing had statistically significant effects on reducing robbery, larceny, and auto theft, driving the decline in overall victimization. Additionally, @LIN used state tax rates as an instrumental variable to regress police presence against crime, discovering elasticities of -1.1 for violent crime and -0.9 for property crime.
 
-Using official data from Open Data Toronto @opendatatoronto and the R programming language @r, the annual police budget, the number of reported crimes, and the number of cleared crimes were analyzed for the years 2020 to 2023. The data revealed that the number of reported crimes consistently rose while the number of cleared crimes remained relatively stable, leading to a reduction in the clearance ratio. The police department's total annual budget increased slightly from 2020 to 2022 but fell by over 45% in 2023. The drastic change in the police budget and the consistent crime numbers indicate that the Toronto police have little influence on crime rates. Therefore, this paper encourages a thorough analysis of why investment in Toronto's police department has not resulted in fewer crimes and increased safety.
+Using official data from Open Data Toronto [@opendatatoronto] and the R programming language [@r], the annual police budget, the number of reported crimes, and the number of cleared crimes were analyzed for the years 2020 to 2023. The data revealed that the number of reported crimes consistently rose while the number of cleared crimes remained relatively stable, leading to a reduction in the clearance ratio. The police department's total annual budget increased slightly from 2020 to 2022 but fell by over 45% in 2023. The drastic change in the police budget and the consistent crime numbers indicate that the Toronto police have little influence on crime rates. Therefore, this paper encourages a thorough analysis of why investment in Toronto's police department has not resulted in fewer crimes and increased safety.
 
 The subsequent sections of this paper include a justification of the data source, an overview of the relevant variables, and a preliminary analysis of the temporal trends between the police budget and the number of crimes in Toronto.
 
 
 # Data {#sec-mydatasection}
 ## Introduction of Datasets
-Two datasets were extracted from Open Data Toronto @opendatatoronto: one records all instances of expenditure and revenue in Toronto Police since 2020, and the other contains the number of reported crimes in various categories along with the corresponding number of cleared crimes up to the end of 2023. Summary statistics of the disaggregated data are presented in @tbl-raw-bud and @tbl-raw-cri in the Appendix. These tables are excluded from the main body because the analysis focuses on aggregate budgets and total crime counts rather than individual expenses and specific crime categories.
+Two datasets were extracted from Open Data Toronto [@opendatatoronto]: "Toronto Police Budget" records all instances of expenditure and revenue in Toronto Police since 2020, and "Police Annual Statistical Report - Reported Crimes" contains the number of reported crimes in various categories along with the corresponding number of cleared crimes up to the end of 2023. Summary statistics of the disaggregated data are presented in @tbl-raw-bud and @tbl-raw-cri in the Appendix. These tables are excluded from the main body because the analysis focuses on aggregate budgets and total crime counts rather than individual expenses and specific crime categories.
 
-Open Data Toronto was chosen as the data source because it provides official data from the City of Toronto, ensuring credibility, variety, and depth. The only alternative source for crime and police budget data is the Toronto Police data portal, and its datasets are identical to those in Open Data Toronto.
+Open Data Toronto was chosen as the data source because it provides official data from the City of Toronto, ensuring credibility, variety, and depth. The city-wide datasets used for this study were difficult to gather, as the aggregation of individual cases requires effort from all members of Toronto Police. Data on reported crimes and clearance rates are also essential measures of public safety and police performance. Thus, to ensure the study's authenticity, official datasets are considered the only reliable sources. The only alternative source for crime and police budget data is the Toronto Police data portal, and its datasets are identical to those in Open Data Toronto.
 
-The data measurements from @opendatatoronto are not entirely reliable. The police budget dataset includes approved budgets from the Toronto Police Services Board and City Council, as well as operational expenses incurred. Expenses or revenues that were not officially reported are excluded from the dataset. The crime reports and cleared crimes dataset relies on reports filed by officers, meaning undiscovered crimes are not included, and unfounded reports are counted. These measurement biases complicate trend interpretation. For example, an increase in reported crimes may reflect either an actual rise in crime or an improvement in officers' ability to detect crimes.
+The data measurements from @opendatatoronto are not entirely reliable. The police budget dataset includes approved budgets from the Toronto Police Services Board and City Council, as well as operational expenses incurred. Expenses or revenues that were not officially reported are excluded from the dataset. The crime reports and cleared crimes dataset relies on reports filed by officers, meaning undiscovered crimes are not included, and unfounded reports are counted. These measurement biases complicate trend interpretation. For example, an increase in reported crimes may reflect either an actual rise in crime or an improvement in officers' ability to detect crimes. Another apparent limitation of the datasets is the time frame; the two datasets only overlap between 2020 and 2023, leaving minimal room for temporal analysis. Time related variables in the raw datasets do not store months or dates, preventing detailed temporal comparison. 
 
-The cleaned, aggregated datasets generated using knitr @knitr and KableExtra @kextra are as follows:
+The cleaned, aggregated datasets generated using 'knitr' [@knitr] and 'KableExtra' [@kextra] are as follows:
 
 ```{r}
 #| echo: false
@@ -90,7 +90,7 @@ summary_table_cri %>%
 
 ## Data Cleaning
 
-Data cleaning and calculations were performed to derive the variables in @tbl-bud and @tbl-cri. The "Year" variable was limited to 2020–2023 because the police budget dataset begins in 2020 and the crime report dataset extends to 2023. "Yearly Budget" was calculated by summing all individual expenses and revenues in the disaggregated dataset, with expenses represented as positive values and revenues as negative values. "Change From Last" was determined by subtracting the previous year's "Yearly Budget" from the current year, excluding 2020, which has no preceding year. "Percent Change" was calculated by dividing the previous year's "Yearly Budget" by the current "Change From Last." For @tbl-cri, "Yearly Crimes" and "Cleared Crimes" were calculated by summing the reported and cleared cases across all crime categories, respectively. The data cleaning process was facilitated by the R package tidyverse @tidyverse.
+Data cleaning and calculations were performed to derive the variables in @tbl-bud and @tbl-cri. The "Year" variable was limited to 2020–2023 because the police budget dataset begins in 2020 and the crime report dataset extends to 2023. "Yearly Budget" was calculated by summing all individual expenses and revenues in the disaggregated dataset, with expenses represented as positive values and revenues as negative values. "Change From Last" was determined by subtracting the previous year's "Yearly Budget" from the current year, excluding 2020, which has no preceding year. "Percent Change" was calculated by dividing the previous year's "Yearly Budget" by the current "Change From Last." For @tbl-cri, "Yearly Crimes" and "Cleared Crimes" were calculated by summing the reported and cleared cases across all crime categories, respectively. The data cleaning process was facilitated by the R package 'tidyverse' [@tidyverse]. All scripts were formatted using the package 'styler' [@styler].
 
 ## Temporal Analysis
 @fig-bud and @fig-cri captures the temporal change in police budgets and crimes.
@@ -114,7 +114,10 @@ ggplot(data = summary_table_bud, aes(x = Year, y = bud_billion)) +
   )
 
 ```
+\vspace{1em}
+\FloatBarrier
 
+@tbl-bud and @fig-bud show minor increases in the police budget from 2020 to 2022, followed by a nearly 50% reduction in 2023. @fig-cri illustrates a consistent rise in total crimes from 2021 to 2023, while the number of cleared cases remained relatively stable over the four-year period. Consequently, @tbl-cri reveals a steady decrease in the clearance rate, indicating a persistent decline in safety conditions in Toronto despite changes in the police budget.
 
 ```{r}
 #| label: fig-cri
@@ -149,8 +152,6 @@ ggplot(summary_table_cri, aes(x = factor(Year))) +
 \vspace{1em}
 
 \FloatBarrier
-
-@tbl-bud and @fig-bud show minor increases in the police budget from 2020 to 2022, followed by a nearly 50% reduction in 2023. @fig-cri illustrates a consistent rise in total crimes from 2021 to 2023, while the number of cleared cases remained relatively stable over the four-year period. Consequently, @tbl-cri reveals a steady decrease in the clearance rate, indicating a persistent decline in safety conditions in Toronto despite changes in the police budget.
 
 It is important to note that the recorded total budget for 2023 may not accurately reflect the actual level of policing resources compared to previous years. Although 2024 data is not included in this paper, the recorded budget for that year is approximately 1.2 billion, similar to the 2023 budget. In contrast, earlier years had budgets exceeding 2 billion dollars. This discrepancy suggests a possible shift in measurement or recording methods in 2023, although @opendatatoronto does not indicate such a change. This limitation may affect the validity of the analysis presented in this paper.
 
@@ -188,8 +189,6 @@ ggplot(data = combined, aes(x = bud_billion, y = Yearly_Crimes)) +
 
 ```
 
-It is not possible to identify a significant relationship between the yearly police budget and annual reported crimes based on @fig-cri-relationship. From 2020 to 2022, both the police budget and crime reports increased, but in 2023, the budget sharply decreased, making the trend appear negative. Additionally, the original datasets provided only four data points for analysis, which is insufficient to establish meaningful correlations.
-
 
 ```{r}
 #| label: fig-clear-relationship
@@ -214,6 +213,8 @@ ggplot(data = combined, aes(x = bud_billion, y = Percentage_Cleared)) +
 
 ```
 \FloatBarrier
+
+It is not possible to identify a significant relationship between the yearly police budget and annual reported crimes based on @fig-cri-relationship. From 2020 to 2022, both the police budget and crime reports increased, but in 2023, the budget sharply decreased, making the trend appear negative. Additionally, the original datasets provided only four data points for analysis, which is insufficient to establish meaningful correlations.
 
 Similarly, the relationship between the police budget and the percentage of cleared crimes remains ambiguous. @fig-clear-relationship shows a negative relationship from 2020 to 2022, but with 2023 recording both the lowest budget and the lowest clearance percentage, contrary to the previous trend.
 
