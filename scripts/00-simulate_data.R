@@ -16,11 +16,12 @@ set.seed(114514)
 
 # Define the start and end date
 start_date <- 2020
-end_date <- 2024
+end_date <- 2023
 
-# Set the number of random dates you want to generate
-number_of_cases <- 100
+# number of random cases to be generated
+number_of_cases <- 1000
 
+# simulate the raw budget dataset with individual instances of expenditure
 data_sim_budget <-
   tibble(
     year = round(
@@ -32,8 +33,24 @@ data_sim_budget <-
     budget = rpois(n = number_of_cases, lambda = 2000)
   )
 
-data_sim_crime <- tibble(year = c(2020, 2021, 2022, 2023, 2024),
-      crime = rpois(n = 5, lambda = 20))
+# simulate crime count dataset with number of reports and number of cleared
+# reports
+data_sim_crime <-
+  tibble(
+    year = round(
+      runif(
+        n = number_of_cases,
+        min = start_date,
+        max = end_date
+      )),
+   crime = rpois(n = number_of_cases, lambda = 100)
+  )
+
+# number of cleared crimes is between 0 and reported crimes
+data_sim_crime <- data_sim_crime %>%
+  rowwise() %>%
+    mutate(cleared = sample(0:crime, 1)) %>%
+    ungroup()
 
 
 #### Write_csv
