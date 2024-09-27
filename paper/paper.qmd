@@ -14,7 +14,6 @@ header-includes:
   - \setlength{\parindent}{2em}
   - \setlength{\parskip}{0.5em}
   - \usepackage{float}
-  - \usepackage{booktabs}
   - \usepackage{placeins}
 number-sections: true
 bibliography: references.bib
